@@ -50,3 +50,58 @@ class IndexView(TemplateView):
 # the corresponding URL pattern should incorporate this:
 path('/', IndexView(), name='index')
 
+#requirements of a generic view
+
+# if the vie neews a model to be processed, it should be set as the value
+#model property of the view
+
+#each type of view looks for a template name with modelname suffixed
+#by the type of generic view. For example, for a list view of processing
+#employee model, Django tries to find employee_list.html
+
+# the generic view is mapped with the URL with as_view() method of the View class
+
+#build a subclass for each of the respective generic view classes to perform
+#CRUD operations on the Employee model:
+
+class Employee(models.Model):
+    name = models.CharField(max_lengeth=100)
+    email = models.EmailField()
+    contact = models.CharField(max_length=15)
+    class Meta:
+        db_table = "employee"
+    
+# CreateView
+# The CreateView class automates the creation of a new instance of the model.
+# To provide a create view, use the sub class of CreateView:
+
+from django.views.generic.edit import CreateView
+
+class EmployeeCreate(CreateView):
+    model = Employee
+    fields = '__all__'
+    success_url = "/employees/success/"
+    
+# A model form based on the model structure is created by this view and passed
+#to the employeeCreate.html template:
+
+<form method="post">
+{% crsf_token %}
+</table>
+    {{form.as_table}}
+</table>
+    <input type="submit" value="Save">
+</form>
+
+#The URL path is updated by mapping the "create/" path to the as_view() method of this class
+
+from .views import EmployeeCreate
+urlpatterns = [
+    ...
+    path('create/', EmployeeCreate.as_view(), name = 'EmployeeCreate') ,
+]
+
+# When the client visits this URL, they are presented with the form. 
+# The user fills and submits the employee details,, which are saved
+#in the Employee table
+
