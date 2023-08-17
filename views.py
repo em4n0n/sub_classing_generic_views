@@ -105,3 +105,39 @@ urlpatterns = [
 # The user fills and submits the employee details,, which are saved
 #in the Employee table
 
+#ListView
+
+#Djangos django.views.generic.list module contains the definition of ListView
+# class. Write its sub-class to render the list of model objects.
+
+#The EmployeeList class is similar to the CreateView sub-class except its
+#base class
+
+from django.views.generic.list import ListView
+class EmployeeList(ListView):
+    model = Employee
+    success_url = "/employees/success/"
+    
+# The template required for this view must be named employee_list.html
+#Django sends the mdoel object in its context. Ussing the DTL loop
+# syntax, you can display the list of employees
+
+<ul>
+
+        {% for object in object_list %}   
+        <li>Name: {{ object.name }}</li>   
+        <li>Email: {{ object.email }}</li>   
+        <li>contact: {{ object.contact }}</li>  
+        <br/> 
+        {% endfor %} 
+</ul>
+
+# If the user visits http://localhost:/8000/employees/list
+#, the browser lists all the rows in the employee table.
+
+# DetailView
+# The generic DeatailView is found in the django.views.generic.deatil module
+# Now, create its sub-class, EmployeeDeail(much the same way as EmployeeList.
+#note that this view shows the details of an object whose primary key is passed
+#as an arguments in the URL. So, add the following path in the app's URL pattern
+
